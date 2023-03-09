@@ -32,7 +32,7 @@ public class GameParticipants {
         return dealer.getCards();
     }
 
-    public Map<String, List<Card>> findPlayerNameAndCards() {
+    public Map<String, List<Card>> findPlayerNameToCards() {
         return players.findPlayerNameToCards();
     }
 
@@ -65,10 +65,8 @@ public class GameParticipants {
         return dealer.currentScore();
     }
 
-    public Map<Map<String, List<Card>>, Score> findPlayerStatusByName() {
-
-
-        return players.findPlayerStatusByName();
+    public Score findScoreOfPlayerByName(final String playerName) {
+        return players.findScoreOfPlayerByName(playerName);
     }
 
     public ResultOfGame findResultOfGame() {

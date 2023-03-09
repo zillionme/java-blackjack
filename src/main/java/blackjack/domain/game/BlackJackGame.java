@@ -31,8 +31,8 @@ public class BlackJackGame {
                 .get(0);
     }
 
-    public Map<String, List<Card>> findPlayerNameAndCards() {
-        return gameParticipants.findPlayerNameAndCards();
+    public Map<String, List<Card>> findPlayerNameToCards() {
+        return gameParticipants.findPlayerNameToCards();
     }
 
     public List<String> findPlayerNames() {
@@ -70,8 +70,9 @@ public class BlackJackGame {
         return gameParticipants.findDealerScore();
     }
 
-    public Map<Map<String, List<Card>>, Score> findPlayerStatusByName() {
-        return gameParticipants.findPlayerStatusByName();
+    //플레이어 이름-카드-점수 출력 수정본1: 문제점 결과를 플레이어마다 따로 출력함.
+    public Score findScoreOfPlayerByName(final String playerName) {
+        return gameParticipants.findScoreOfPlayerByName(playerName);
     }
 
     public ResultOfGame findResultOfGame() {

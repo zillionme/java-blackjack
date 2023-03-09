@@ -2,7 +2,6 @@ package blackjack.view;
 
 import blackjack.domain.card.Card;
 import blackjack.domain.game.ResultType;
-import blackjack.domain.participants.Score;
 
 import java.util.List;
 import java.util.Map;
@@ -82,15 +81,18 @@ public class OutputView {
         System.out.println(DEALER + " " + CARD + DELIMITER + cards + RESULT + dealerScore);
     }
 
-    public void printFinalStatusOfPlayers(final Map<Map<String, List<Card>>, Score> statusOfPlayers) {
-        statusOfPlayers.forEach(this::printFinalStatusOfPlayer);
-        System.out.println();
+    //플레이어 이름-카드-점수 출력 수정본1: 문제점 결과를 플레이어마다 따로 출력함.
+    public void printFinalStatusOfPlayer(final String playerName, final List<Card> playerCard, final int playerScore) {
+        System.out.println(playerName + DELIMITER + convertCards(playerCard) + RESULT + playerScore);
     }
 
-    //수정
-    private void printFinalStatusOfPlayer(final Map<String, List<Card>> playerNameToCards, final Score playerScore) {
-        playerNameToCards.forEach((playerName, playerCards) ->
-                System.out.println(playerName + DELIMITER + convertCards(playerCards) + RESULT + playerScore.getValue()));
+    //수정본2:
+    public void printFinalStatusOfPlayers(final Map<String, List<Card>> playerNameToCards,
+                                          final Map<String, Integer> playerNameToScore) {
+        playerNameToCards.forEach((playerName, playerCard) ->
+                System.out.println(
+                        playerName + DELIMITER + convertCards(playerCard) + RESULT + playerNameToScore.get(playerName)));
+
     }
 
     public void printFinalResult(final Map<ResultType, Integer> dealerResult, final Map<String, ResultType> playerResult) {

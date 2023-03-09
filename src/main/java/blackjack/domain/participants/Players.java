@@ -116,12 +116,11 @@ public class Players {
                         LinkedHashMap::new));
     }
 
-    public Map<Map<String, List<Card>>, Score> findPlayerStatusByName() {
+    public Score findScoreOfPlayerByName(final String playerName) {
         return players.stream()
-                .collect(Collectors.toMap(player -> Map.of(player.getName(), player.getCards()),
-                        Player::currentScore,
-                        (x, y) -> y,
-                        LinkedHashMap::new));
+                .filter(player -> player.hasName(playerName))
+                .findAny()
+                .map(Player::currentScore)
+                .orElseThrow(() -> new IllegalArgumentException(ERROR_NOT_EXIST_PLAYER));
     }
-
 }

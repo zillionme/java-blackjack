@@ -46,7 +46,7 @@ public class BlackJackController {
 
     private void printInitialCard(final BlackJackGame blackJackGame) {
         outputView.printInitialCards(blackJackGame.findDealerInitialCard(),
-                blackJackGame.findPlayerNameAndCards());
+                blackJackGame.findPlayerNameToCards());
     }
 
     private void play(final BlackJackGame blackJackGame) {
@@ -82,7 +82,13 @@ public class BlackJackController {
     private void printFinalStatusOfParticipants(final BlackJackGame blackJackGame) {
         outputView.printFinalStatusOfDealer(blackJackGame.findDealerCard(), blackJackGame.findDealerScore()
                 .getValue());
-        outputView.printFinalStatusOfPlayers(blackJackGame.findPlayerStatusByName());
+
+        for (final String playerName : blackJackGame.findPlayerNames()) {
+            outputView.printFinalStatusOfPlayer(playerName,
+                    blackJackGame.findCardsOfPlayerByName(playerName),
+                    blackJackGame.findScoreOfPlayerByName(playerName)
+                            .getValue());
+        }
     }
 
     private void printResultOfGame(final BlackJackGame blackJackGame) {

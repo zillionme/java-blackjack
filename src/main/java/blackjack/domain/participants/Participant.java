@@ -25,7 +25,6 @@ public abstract class Participant {
         cardPocket.addCard(card);
     }
 
-    //todo : int로 바꾸는 것이 맞는가?
     public Score currentScore() {
         return cardPocket.getScore();
     }
