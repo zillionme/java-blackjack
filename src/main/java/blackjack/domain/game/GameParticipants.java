@@ -3,6 +3,7 @@ package blackjack.domain.game;
 import blackjack.domain.card.Card;
 import blackjack.domain.participants.Dealer;
 import blackjack.domain.participants.Players;
+import blackjack.domain.participants.Score;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,10 @@ public class GameParticipants {
     public GameParticipants(final Players players) {
         dealer = new Dealer();
         this.players = players;
+    }
+
+    public int findDealerDrawPoint() {
+        return Dealer.getDrawPoint();
     }
 
     public void distributeInitialCards(final Deck deck) {
@@ -56,21 +61,19 @@ public class GameParticipants {
         return drawCount;
     }
 
-    public int findDealerDrawPoint() {
-        return dealer.getDrawPoint();
-    }
-
-    public int findDealerScore() {
+    public Score findDealerScore() {
         return dealer.currentScore();
     }
 
-    public Map<Map<String, List<Card>>, Integer> findPlayerStatusByName() {
+    public Map<Map<String, List<Card>>, Score> findPlayerStatusByName() {
+
+
         return players.findPlayerStatusByName();
     }
 
     public ResultOfGame findResultOfGame() {
         final Map<String, ResultType> playerResult = players.calculateResult(new GameReferee(dealer));
-        final Map<ResultType, Integer> dealerResult = dealer.calculateResult(playerResult);
+        final Map<ResultType, Integer> dealerResult = Dealer.calculateResult(playerResult);
 
         return new ResultOfGame(playerResult, dealerResult);
     }

@@ -2,6 +2,7 @@ package blackjack.view;
 
 import blackjack.domain.card.Card;
 import blackjack.domain.game.ResultType;
+import blackjack.domain.participants.Score;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,37 @@ public class OutputView {
     private static final String CARD = "카드";
     private static final String RESULT = " - 결과: ";
 
+    public static void printInitialDistributionMessage(final Map<String, List<Card>> playerNameToCards) {
+        final String playerNames = String.join(DELIMITER_BETWEEN_CARDS, playerNameToCards.keySet());
+        System.out.printf((OUTPUT_DISTRIBUTE_MESSAGE) + System.lineSeparator(), DEALER, playerNames);
+    }
+
+    public static void printDealerCardDrawMessage(final int dealerDrawPoint) {
+        System.out.printf(OUTPUT_DEALER_STATUS_MESSAGE + System.lineSeparator(), DEALER, dealerDrawPoint);
+    }
+
+    private static void printPlayerResult(final String name, final ResultType resultType) {
+        System.out.println(name + DELIMITER + OutputViewResultType.from(resultType)
+                .getPrintResultType());
+    }
+
+    public static void printError(final Exception exception) {
+        System.out.println(exception.getMessage());
+    }
+
+    private static String convertCard(final Card card) {
+        final String convertedSymbol = OutputViewSymbol.from(card.getSymbol())
+                .getPrintSymbol();
+        final String convertedShape = OutputViewShape.from(card.getShape())
+                .getPrintShape();
+
+        return convertedSymbol + convertedShape;
+    }
+
+    private void printPlayersResult(final Map<String, ResultType> playersResult) {
+        playersResult.forEach(OutputView::printPlayerResult);
+    }
+
     /**
      * 질문: outputView의 메서드들이 인자로 넘겨받는 Map이 LinkedHashMap이라
      * 플레이어의 순서가 보장되지만, outview입장에서는 플레이어 출력 순서가 보장되는지 알 수 없음
@@ -30,11 +62,6 @@ public class OutputView {
         System.out.println();
     }
 
-    private void printInitialDistributionMessage(final Map<String, List<Card>> playerNameToCards) {
-        final String playerNames = String.join(DELIMITER_BETWEEN_CARDS, playerNameToCards.keySet());
-        System.out.printf((OUTPUT_DISTRIBUTE_MESSAGE) + System.lineSeparator(), DEALER, playerNames);
-    }
-
     private void printInitialDealerCard(final Card card) {
         System.out.println(DEALER + DELIMITER + convertCard(card));
     }
@@ -46,26 +73,13 @@ public class OutputView {
 
     private String convertCards(final List<Card> cards) {
         return cards.stream()
-                .map(this::convertCard)
+                .map(OutputView::convertCard)
                 .collect(Collectors.joining(DELIMITER_BETWEEN_CARDS));
-    }
-
-    private String convertCard(final Card card) {
-        final String convertedSymbol = OutputViewSymbol.from(card.getSymbol())
-                .getPrintSymbol();
-        final String convertedShape = OutputViewShape.from(card.getShape())
-                .getPrintShape();
-
-        return convertedSymbol + convertedShape;
     }
 
     public void printCurrentCardsOfPlayer(final String playerName, final List<Card> playerCards) {
         final String cards = convertCards(playerCards);
         System.out.println(playerName + DELIMITER + cards);
-    }
-
-    public void printDealerCardDrawMessage(final int dealerDrawPoint) {
-        System.out.printf(OUTPUT_DEALER_STATUS_MESSAGE + System.lineSeparator(), DEALER, dealerDrawPoint);
     }
 
     public void printFinalStatusOfDealer(final List<Card> dealerCards, final int dealerScore) {
@@ -74,14 +88,15 @@ public class OutputView {
         System.out.println(DEALER + " " + CARD + DELIMITER + cards + RESULT + dealerScore);
     }
 
-    public void printFinalStatusOfPlayers(final Map<Map<String, List<Card>>, Integer> statusOfPlayers) {
+    public void printFinalStatusOfPlayers(final Map<Map<String, List<Card>>, Score> statusOfPlayers) {
         statusOfPlayers.forEach(this::printFinalStatusOfPlayer);
         System.out.println();
     }
 
-    private void printFinalStatusOfPlayer(final Map<String, List<Card>> playerNameToCards, final Integer playerScore) {
+    //수정
+    private void printFinalStatusOfPlayer(final Map<String, List<Card>> playerNameToCards, final Score playerScore) {
         playerNameToCards.forEach((playerName, playerCards) ->
-                System.out.println(playerName + DELIMITER + convertCards(playerCards) + RESULT + playerScore));
+                System.out.println(playerName + DELIMITER + convertCards(playerCards) + RESULT + playerScore.getValue()));
     }
 
     public void printFinalResult(final Map<ResultType, Integer> dealerResult, final Map<String, ResultType> playerResult) {
@@ -103,19 +118,6 @@ public class OutputView {
             System.out.print(dealerResult.get(resultType) + OutputViewResultType.from(resultType)
                     .getPrintResultType());
         }
-    }
-
-    private void printPlayersResult(final Map<String, ResultType> playersResult) {
-        playersResult.forEach(this::printPlayerResult);
-    }
-
-    private void printPlayerResult(final String name, final ResultType resultType) {
-        System.out.println(name + DELIMITER + OutputViewResultType.from(resultType)
-                .getPrintResultType());
-    }
-
-    public void printError(final Exception exception) {
-        System.out.println(exception.getMessage());
     }
 
 }

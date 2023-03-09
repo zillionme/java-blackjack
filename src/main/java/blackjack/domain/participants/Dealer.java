@@ -9,13 +9,7 @@ public class Dealer extends Participant {
 
     private static final int DEALER_DRAW_POINT = 16;
 
-    @Override
-    public boolean isDrawable() {
-        final int currentScore = currentScore();
-        return currentScore <= DEALER_DRAW_POINT;
-    }
-
-    public Map<ResultType, Integer> calculateResult(final Map<String, ResultType> resultOfPlayers) {
+    public static Map<ResultType, Integer> calculateResult(final Map<String, ResultType> resultOfPlayers) {
         return resultOfPlayers.entrySet()
                 .stream()
                 .collect(Collectors.groupingBy(entry -> entry.getValue()
@@ -23,8 +17,14 @@ public class Dealer extends Participant {
 
     }
 
-    public int getDrawPoint() {
+    public static int getDrawPoint() {
         return DEALER_DRAW_POINT;
+    }
+
+    @Override
+    public boolean isDrawable() {
+        final Score currentScore = currentScore();
+        return currentScore.getValue() <= DEALER_DRAW_POINT;
     }
 
 }

@@ -25,6 +25,11 @@ public class BlackJackController {
         blackJackGame.distributeInitialCards();
     }
 
+    private void drawDealerCards(final BlackJackGame blackJackGame) {
+        IntStream.range(0, blackJackGame.findDealerDrawCount())
+                .forEach(ignored -> OutputView.printDealerCardDrawMessage(blackJackGame.findDealerDrawPoint()));
+    }
+
     public void generate(final DeckFactory deckFactory) {
         final BlackJackGame blackJackGame = createBlackJackGame(deckFactory);
 
@@ -36,7 +41,7 @@ public class BlackJackController {
 
     private BlackJackGame createBlackJackGame(final DeckFactory deckFactory) {
         return repeatUntilNoException(
-                () -> BlackJackGame.of(inputView.inputPlayerNames(), deckFactory.generate()), outputView::printError);
+                () -> BlackJackGame.of(inputView.inputPlayerNames(), deckFactory.generate()), OutputView::printError);
     }
 
     private void printInitialCard(final BlackJackGame blackJackGame) {
@@ -57,7 +62,7 @@ public class BlackJackController {
 
     private DrawCommand inputDrawCommand(final String playerName) {
         return repeatUntilNoException(
-                () -> inputView.inputCommand(playerName), outputView::printError);
+                () -> inputView.inputCommand(playerName), OutputView::printError);
     }
 
     private void drawPlayerCard(final String playerName, final BlackJackGame blackJackGame) {
@@ -69,18 +74,14 @@ public class BlackJackController {
         }
     }
 
-    private void drawDealerCards(final BlackJackGame blackJackGame) {
-        IntStream.range(0, blackJackGame.findDealerDrawCount())
-                .forEach(ignored -> outputView.printDealerCardDrawMessage(blackJackGame.findDealerDrawPoint()));
-    }
-
     private void printResult(final BlackJackGame blackJackGame) {
         printFinalStatusOfParticipants(blackJackGame);
         printResultOfGame(blackJackGame);
     }
 
     private void printFinalStatusOfParticipants(final BlackJackGame blackJackGame) {
-        outputView.printFinalStatusOfDealer(blackJackGame.findDealerCard(), blackJackGame.findDealerScore());
+        outputView.printFinalStatusOfDealer(blackJackGame.findDealerCard(), blackJackGame.findDealerScore()
+                .getValue());
         outputView.printFinalStatusOfPlayers(blackJackGame.findPlayerStatusByName());
     }
 

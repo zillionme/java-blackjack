@@ -116,7 +116,7 @@ public class Players {
                         LinkedHashMap::new));
     }
 
-    public Map<Map<String, List<Card>>, Integer> findPlayerStatusByName() {
+    public Map<Map<String, List<Card>>, Score> findPlayerStatusByName() {
         return players.stream()
                 .collect(Collectors.toMap(player -> Map.of(player.getName(), player.getCards()),
                         Player::currentScore,
