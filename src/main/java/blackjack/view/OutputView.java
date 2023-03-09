@@ -23,19 +23,6 @@ public class OutputView {
         System.out.printf((OUTPUT_DISTRIBUTE_MESSAGE) + System.lineSeparator(), DEALER, playerNames);
     }
 
-    public static void printDealerCardDrawMessage(final int dealerDrawPoint) {
-        System.out.printf(OUTPUT_DEALER_STATUS_MESSAGE + System.lineSeparator(), DEALER, dealerDrawPoint);
-    }
-
-    private static void printPlayerResult(final String name, final ResultType resultType) {
-        System.out.println(name + DELIMITER + OutputViewResultType.from(resultType)
-                .getPrintResultType());
-    }
-
-    public static void printError(final Exception exception) {
-        System.out.println(exception.getMessage());
-    }
-
     private static String convertCard(final Card card) {
         final String convertedSymbol = OutputViewSymbol.from(card.getSymbol())
                 .getPrintSymbol();
@@ -45,16 +32,19 @@ public class OutputView {
         return convertedSymbol + convertedShape;
     }
 
-    private void printPlayersResult(final Map<String, ResultType> playersResult) {
-        playersResult.forEach(OutputView::printPlayerResult);
+    public static void printDealerCardDrawMessage(final int dealerDrawPoint) {
+        System.out.printf(OUTPUT_DEALER_STATUS_MESSAGE + System.lineSeparator(), DEALER, dealerDrawPoint);
     }
 
-    /**
-     * 질문: outputView의 메서드들이 인자로 넘겨받는 Map이 LinkedHashMap이라
-     * 플레이어의 순서가 보장되지만, outview입장에서는 플레이어 출력 순서가 보장되는지 알 수 없음
-     * 이대로 두는 것이 나은지?
-     * 이러한 경우 List<PlayerNames>를 따로 인자로 전달해, 출력 순서를 보장해야하는지 궁금합니다.
-     */
+    private static void printPlayerResult(final String name, final ResultType resultType) {
+        System.out.println(name + DELIMITER + OutputViewResultType.from(resultType)
+                .getPrintResultType());
+    }
+
+    public void printError(final Exception exception) {
+        System.out.println(exception.getMessage());
+    }
+
     public void printInitialCards(final Card dealerCard, final Map<String, List<Card>> playerNameToCards) {
         printInitialDistributionMessage(playerNameToCards);
         printInitialDealerCard(dealerCard);
@@ -75,6 +65,10 @@ public class OutputView {
         return cards.stream()
                 .map(OutputView::convertCard)
                 .collect(Collectors.joining(DELIMITER_BETWEEN_CARDS));
+    }
+
+    private void printPlayersResult(final Map<String, ResultType> playersResult) {
+        playersResult.forEach(OutputView::printPlayerResult);
     }
 
     public void printCurrentCardsOfPlayer(final String playerName, final List<Card> playerCards) {

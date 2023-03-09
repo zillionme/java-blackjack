@@ -22,10 +22,6 @@ public class BlackJackGame {
         return new BlackJackGame(new GameParticipants(Players.from(playerNames)), deck);
     }
 
-    public int findDealerDrawPoint() {
-        return gameParticipants.findDealerDrawPoint();
-    }
-
     public void distributeInitialCards() {
         gameParticipants.distributeInitialCards(deck);
     }
@@ -43,6 +39,7 @@ public class BlackJackGame {
         return gameParticipants.findPlayerNames();
     }
 
+
     public boolean isPlayerDrawable(final String playerName) {
         return gameParticipants.isPlayerDrawable(playerName);
     }
@@ -55,6 +52,10 @@ public class BlackJackGame {
 
     public List<Card> findCardsOfPlayerByName(final String playerName) {
         return gameParticipants.findCardsOfPlayerByName(playerName);
+    }
+
+    public int findDealerDrawPoint() {
+        return gameParticipants.findDealerDrawPoint();
     }
 
     public int findDealerDrawCount() {
@@ -76,4 +77,5 @@ public class BlackJackGame {
     public ResultOfGame findResultOfGame() {
         return gameParticipants.findResultOfGame();
     }
+
 }

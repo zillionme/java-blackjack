@@ -25,11 +25,6 @@ public class BlackJackController {
         blackJackGame.distributeInitialCards();
     }
 
-    private void drawDealerCards(final BlackJackGame blackJackGame) {
-        IntStream.range(0, blackJackGame.findDealerDrawCount())
-                .forEach(ignored -> OutputView.printDealerCardDrawMessage(blackJackGame.findDealerDrawPoint()));
-    }
-
     public void generate(final DeckFactory deckFactory) {
         final BlackJackGame blackJackGame = createBlackJackGame(deckFactory);
 
@@ -41,7 +36,12 @@ public class BlackJackController {
 
     private BlackJackGame createBlackJackGame(final DeckFactory deckFactory) {
         return repeatUntilNoException(
-                () -> BlackJackGame.of(inputView.inputPlayerNames(), deckFactory.generate()), OutputView::printError);
+                () -> BlackJackGame.of(inputView.inputPlayerNames(), deckFactory.generate()), outputView::printError);
+    }
+
+    private void drawDealerCards(final BlackJackGame blackJackGame) {
+        IntStream.range(0, blackJackGame.findDealerDrawCount())
+                .forEach(ignored -> OutputView.printDealerCardDrawMessage(blackJackGame.findDealerDrawPoint()));
     }
 
     private void printInitialCard(final BlackJackGame blackJackGame) {
@@ -62,7 +62,7 @@ public class BlackJackController {
 
     private DrawCommand inputDrawCommand(final String playerName) {
         return repeatUntilNoException(
-                () -> inputView.inputCommand(playerName), OutputView::printError);
+                () -> inputView.inputCommand(playerName), outputView::printError);
     }
 
     private void drawPlayerCard(final String playerName, final BlackJackGame blackJackGame) {
